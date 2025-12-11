@@ -6,7 +6,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import plotly.graph_objects as go
+import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 from scipy.stats import norm
 from datetime import datetime, timedelta, time as dt_time

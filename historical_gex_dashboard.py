@@ -163,100 +163,100 @@ class HistoricalDataDB:
         try:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
-        
-        # Main historical data table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS historical_gex_data (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                symbol TEXT NOT NULL,
-                timestamp DATETIME NOT NULL,
-                date TEXT NOT NULL,
-                time TEXT NOT NULL,
-                strike REAL NOT NULL,
-                spot_price REAL,
-                futures_price REAL,
-                call_oi INTEGER,
-                put_oi INTEGER,
-                call_oi_change INTEGER,
-                put_oi_change INTEGER,
-                call_volume INTEGER,
-                put_volume INTEGER,
-                call_iv REAL,
-                put_iv REAL,
-                call_ltp REAL,
-                put_ltp REAL,
-                call_delta REAL,
-                put_delta REAL,
-                call_gamma REAL,
-                put_gamma REAL,
-                call_vanna REAL,
-                put_vanna REAL,
-                call_charm REAL,
-                put_charm REAL,
-                net_gex REAL,
-                net_dex REAL,
-                net_vanna REAL,
-                net_charm REAL,
-                call_flow_gex REAL,
-                put_flow_gex REAL,
-                net_flow_gex REAL,
-                call_flow_dex REAL,
-                put_flow_dex REAL,
-                net_flow_dex REAL,
-                hedging_pressure REAL,
-                expiry_date TEXT,
-                days_to_expiry INTEGER,
-                UNIQUE(symbol, timestamp, strike)
-            )
-        """)
-        
-        # Aggregated metrics table for faster queries
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS aggregated_metrics (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                symbol TEXT NOT NULL,
-                timestamp DATETIME NOT NULL,
-                date TEXT NOT NULL,
-                time TEXT NOT NULL,
-                spot_price REAL,
-                futures_price REAL,
-                total_call_oi REAL,
-                total_put_oi REAL,
-                pcr REAL,
-                net_gex_total REAL,
-                net_dex_total REAL,
-                net_vanna_total REAL,
-                net_charm_total REAL,
-                flow_gex_total REAL,
-                flow_dex_total REAL,
-                gex_near_positive REAL,
-                gex_near_negative REAL,
-                dex_near_above REAL,
-                dex_near_below REAL,
-                atm_strike REAL,
-                atm_straddle REAL,
-                max_pain REAL,
-                highest_call_oi_strike REAL,
-                highest_put_oi_strike REAL,
-                expiry_date TEXT,
-                days_to_expiry INTEGER,
-                UNIQUE(symbol, timestamp)
-            )
-        """)
-        
-        # Index for faster time-based queries
-        cursor.execute("""
-            CREATE INDEX IF NOT EXISTS idx_historical_timestamp 
-            ON historical_gex_data(symbol, timestamp)
-        """)
-        
-        cursor.execute("""
-            CREATE INDEX IF NOT EXISTS idx_aggregated_timestamp 
-            ON aggregated_metrics(symbol, timestamp)
-        """)
-        
-        conn.commit()
-        conn.close()
+            
+            # Main historical data table
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS historical_gex_data (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    symbol TEXT NOT NULL,
+                    timestamp DATETIME NOT NULL,
+                    date TEXT NOT NULL,
+                    time TEXT NOT NULL,
+                    strike REAL NOT NULL,
+                    spot_price REAL,
+                    futures_price REAL,
+                    call_oi INTEGER,
+                    put_oi INTEGER,
+                    call_oi_change INTEGER,
+                    put_oi_change INTEGER,
+                    call_volume INTEGER,
+                    put_volume INTEGER,
+                    call_iv REAL,
+                    put_iv REAL,
+                    call_ltp REAL,
+                    put_ltp REAL,
+                    call_delta REAL,
+                    put_delta REAL,
+                    call_gamma REAL,
+                    put_gamma REAL,
+                    call_vanna REAL,
+                    put_vanna REAL,
+                    call_charm REAL,
+                    put_charm REAL,
+                    net_gex REAL,
+                    net_dex REAL,
+                    net_vanna REAL,
+                    net_charm REAL,
+                    call_flow_gex REAL,
+                    put_flow_gex REAL,
+                    net_flow_gex REAL,
+                    call_flow_dex REAL,
+                    put_flow_dex REAL,
+                    net_flow_dex REAL,
+                    hedging_pressure REAL,
+                    expiry_date TEXT,
+                    days_to_expiry INTEGER,
+                    UNIQUE(symbol, timestamp, strike)
+                )
+            """)
+            
+            # Aggregated metrics table for faster queries
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS aggregated_metrics (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    symbol TEXT NOT NULL,
+                    timestamp DATETIME NOT NULL,
+                    date TEXT NOT NULL,
+                    time TEXT NOT NULL,
+                    spot_price REAL,
+                    futures_price REAL,
+                    total_call_oi REAL,
+                    total_put_oi REAL,
+                    pcr REAL,
+                    net_gex_total REAL,
+                    net_dex_total REAL,
+                    net_vanna_total REAL,
+                    net_charm_total REAL,
+                    flow_gex_total REAL,
+                    flow_dex_total REAL,
+                    gex_near_positive REAL,
+                    gex_near_negative REAL,
+                    dex_near_above REAL,
+                    dex_near_below REAL,
+                    atm_strike REAL,
+                    atm_straddle REAL,
+                    max_pain REAL,
+                    highest_call_oi_strike REAL,
+                    highest_put_oi_strike REAL,
+                    expiry_date TEXT,
+                    days_to_expiry INTEGER,
+                    UNIQUE(symbol, timestamp)
+                )
+            """)
+            
+            # Index for faster time-based queries
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_historical_timestamp 
+                ON historical_gex_data(symbol, timestamp)
+            """)
+            
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_aggregated_timestamp 
+                ON aggregated_metrics(symbol, timestamp)
+            """)
+            
+            conn.commit()
+            conn.close()
         except Exception as e:
             st.warning(f"⚠️ Database initialization: Using temporary database. Data will not persist between sessions.")
             # Fall back to in-memory database if file system fails

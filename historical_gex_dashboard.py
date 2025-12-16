@@ -145,14 +145,24 @@ SYMBOL_CONFIG = {
 # ============================================================================
 
 class HistoricalDataDB:
-    def __init__(self, db_path: str = "/home/claude/historical_gex_data.db"):
-        self.db_path = db_path
+    def __init__(self, db_path: str = None):
+        if db_path is None:
+            # Use temp directory or current directory for Streamlit Cloud compatibility
+            import tempfile
+            import os
+            if os.path.exists('/tmp'):
+                self.db_path = "/tmp/historical_gex_data.db"
+            else:
+                self.db_path = os.path.join(tempfile.gettempdir(), "historical_gex_data.db")
+        else:
+            self.db_path = db_path
         self.init_database()
     
     def init_database(self):
         """Initialize database with required tables"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
         
         # Main historical data table
         cursor.execute("""
@@ -247,6 +257,10 @@ class HistoricalDataDB:
         
         conn.commit()
         conn.close()
+        except Exception as e:
+            st.warning(f"⚠️ Database initialization: Using temporary database. Data will not persist between sessions.")
+            # Fall back to in-memory database if file system fails
+            self.db_path = ":memory:"
     
     def insert_historical_data(self, df: pd.DataFrame, meta: Dict):
         """Insert complete option chain data"""

@@ -1,6 +1,6 @@
 # ============================================================================
 # NYZTrade Simple GEX Dashboard - Complete Single File
-# No external dependencies required - installs everything automatically
+# No external dependencies required - installs everything automatically.
 # ============================================================================
 
 import subprocess

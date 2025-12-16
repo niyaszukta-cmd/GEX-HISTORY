@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-Simple One-Month GEX Data Collector
-Fetches historical data from Dhan Rolling API and generates graphs
-"""
 
 import requests
 import pandas as pd

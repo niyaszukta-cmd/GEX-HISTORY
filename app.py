@@ -8,7 +8,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import plotly.graph_objects as go
+import plotly
 from plotly.subplots import make_subplots
 import plotly.express as px
 from scipy.stats import norm
